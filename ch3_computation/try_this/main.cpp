@@ -17,8 +17,22 @@ int main()
     cout << "Please enter an amount followed by a unit (y or k or p):\n";
     cin >> amount >> unit;
 
-    cout << amount << "\n";
-    cout << unit << "\n";
-
+    if (unit == 'y')
+    {
+        cout << amount << " yen == " << amount / yen_per_dollar << " dollars\n";
+    }
+    else if (unit == 'k')
+    {
+        cout << amount << " kroner == " << amount / kroner_per_dollar << " dollars\n";
+    }
+    else if (unit == 'p')
+    {
+        cout << amount << " pounds == " << amount / pounds_per_dollar << " dollars\n";
+    }
+    else
+    {
+        cout << "Sorry, I don't know a currency called " << unit << ".\n;";
+    }
+    
     return 0;
 }
