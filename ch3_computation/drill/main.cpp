@@ -1,52 +1,91 @@
 #include<iostream>
+#include<vector>
+#include<algorithm>
 
 using namespace std;
 
 int main()
 {
-    double num1 = 0;
-    double num2 = 0;
-    double smaller_num = 0;
-    double larger_num = 0;
-    bool within_threshold = false;
-    double diff_threshold = 1.0 / 100;
+    double num = 0;
+    string units = "";
+    double smallest_so_far;
+    double largest_so_far;
+    bool is_first_pass = true;
+    int cm_per_m = 100;
+    double cm_per_in = 2.54;
+    int in_per_ft = 12;
 
-    string prompt = "Please enter two doubles (decimal numbers):\n";
-
+    double m_per_cm = 1.0/100;
+    double m_per_in = 2.54/100;
+    double m_per_ft = 2.54*12/100;
+    double sum_in_meters = 0;
+    double meter_length = 0;
+    vector<double> meter_lengths;
+    
+    string prompt = "Please enter a number followed by a unit of cm, in, ft, or m:\n";
     cout << prompt;
 
-    while (cin >> num1 >> num2)
+    while (cin >> num >> units)
     {
-        if (num1 < num2)
+        if (units == "cm" || units == "in" || units == "ft" || units == "m")
         {
-            smaller_num = num1;
-            larger_num = num2;
-        } else if (num2 < num1)
-        {
-            smaller_num = num2;
-            larger_num = num1;
-        } else if (num1 == num2)
-        {
-            cout << "The numbers are equal\n";
+            if (units == "cm")
+            {
+                meter_length = num * m_per_cm;
+            }
+            else if (units == "in")
+            {
+                meter_length = num * m_per_in;
+            }
+            else if (units == "ft")
+            {
+                meter_length = num * m_per_ft;
+            }
+            else
+            {
+                // unit is meters
+                meter_length = num;
+            }
+
+            sum_in_meters += meter_length;
+            meter_lengths.push_back(meter_length);
+
+            if (is_first_pass)
+            {
+                smallest_so_far = meter_length;
+                largest_so_far = meter_length;
+                is_first_pass = false;
+            }
+
+            if (meter_length < smallest_so_far)
+            {
+                smallest_so_far = meter_length;
+            }
+
+            if (meter_length > largest_so_far)
+            {
+                largest_so_far = meter_length;
+            }
+            
+            cout << "---------------\n";    
+            cout << "You entered: " << num << units << "\n";
+            cout << "Meter length: " << meter_length << "m\n";
+            cout << "smallest_so_far: " << smallest_so_far << "\n";
+            cout << "largest_so_far: " << largest_so_far << "\n";
         }
-
-        cout << "The smaller number is: " << smaller_num << "\n";
-        cout << "The larger number is: " << larger_num << "\n";
-
-        // Write out "the numbers are almost equal" if the two numbers differ by
-        // less than (1.0/100)
-        
-        bool within_threshold = ((larger_num - smaller_num) < diff_threshold);
-
-        cout << "diff_threshold: " << diff_threshold << "\n";
-
-        if (within_threshold)
+        else
         {
-            cout << "The numbers are almost equal\n";
+            cout << "---------------\n";
+            cout << "Units must be cm, in, ft, or m \n";
         }
-
-        cout << prompt;
     }
-    
+
+    ranges::sort(meter_lengths);
+
+    for (int i = 0; i < meter_lengths.size(); i++)
+    {
+        cout << meter_lengths[i] << "\n";
+    }
+
     return 0;
 }
